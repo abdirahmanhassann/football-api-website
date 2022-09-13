@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+      <link rel="stylesheet" href="footy.css">
+      <nav class="navv">
+  
+<a id="delivery">teams</a>
+<a id="menu">leagues</a>
+<a id="location">news </a>
+<a id="login"> login</a>
+</nav>
+
+      <div class="boddy">
+        <div id="newsdiv">
+
+        </div>
+      <div class="container">
+        <div id="tablediv">
+      league standings
+        </div>
+        <div id="choose">
+          <div class="dropdownleague">
+            <button class="dropbtnleague">season</button>
+            <div class="dropdown-contentleague">
+              <button id="39">premier league</button>
+              <button id="61">ligue 1</button>
+              <button id="78">bundesliga</button>
+              <button id="140">la liga</button>
+              <button id="135">serie a</button>
+            </div>
+          </div>
+      </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>MP</th>
+              <th>Wins</th>
+              <th>Draws</th>
+              <th>Loses</th>
+              <th>points</th>
+            </tr>
+          </thead>
+          <tbody id="data">
+      
+          </tbody>
+        </table>
+  </div>
+<div id="wrapper">
+  
+  <div id="popup">
+        <header id="popupheader"></header>
+      </div>
+      </div>
+     </div>
+    </div>
+     <script>
+      fetch("https://v3.football.api-sports.io/fixtures?live=all",{  
+        
+        " method" :"GET",
+      "headers": {
+"x-rapidapi-host" : "v3.football.api-sports.io",
+"x-rapidapi-key": "da28920656c77f22e66c6021321759f7"
+      }
+
+      }
+      )
+       .then(res=>res.json())
+      .then(data=>{
+console.log(data)
+var response= data['response']
+for (var i =0;i<response.length;i++){
+ var awayname=data['response'][i]['teams']['away']['name']
+ var awaypic= data['response'][i]['teams']['away']['logo']
+       var homename= data['response'][i]['teams']['home']['name']
+       var homepic=data['response'][i]['teams']['home']['logo']
+      var awaygoals=data['response'][i]['goals']['away']
+      var homegoals=data['response'][i]['goals']['home']
+      var statuss=data['response'][i]['fixture']['status']['elapsed']
+      var away=[awayname,awaygoals,awaypic]
+    var  home=[homename,homegoals,homepic]
+     // console.log(away,home,statuss)
+      var newDiv = document.createElement("div");
+      var para=document.createElement("div");
+      var statuspara=document.createElement("div");
+      var awaypara= document.createElement("div");
+      var awaycontent=document.createTextNode(awayname);
+      var awayscorepara= document.createElement("div");
+      var awayscorecontent=document.createTextNode(awaygoals);
+      var homeescorepara= document.createElement("div");
+      var homeescorecontent=document.createTextNode(homegoals);
+var newContent = document.createTextNode(homename);
+var statuscontent = document.createTextNode(statuss+"'");
+/*if(statuss==null){
+  document.getElementById("div").remove();
+}*/
+firstpic=document.createElement("img");
+firstpic.setAttribute('src',homepic);
+secondpic=document.createElement("img");
+secondpic.setAttribute('src',awaypic);
+secondpic.setAttribute('id', 'secondpic');
+firstpic.setAttribute('id', 'firstpic');
+awaypara.setAttribute('id','awaypara');
+awayscorepara.setAttribute('id','awayscore');
+homeescorepara.setAttribute('id','homescore');
+statuspara.setAttribute('id','statuspara');
+newDiv.appendChild(para);
+newDiv.appendChild(firstpic);
+newDiv.appendChild(secondpic);
+newDiv.appendChild(homeescorepara);
+newDiv.appendChild(awayscorepara);
+para.appendChild(newContent);
+awaypara.appendChild(awaycontent);
+awayscorepara.appendChild(awayscorecontent);
+homeescorepara.appendChild(homeescorecontent);
+newDiv.appendChild(awaypara);
+newDiv.appendChild(statuspara);
+statuspara.appendChild(statuscontent);
+newDiv.setAttribute('id',"divv");
+var currentDiv = document.getElementById("div1");
+document.body.insertBefore(newDiv, currentDiv);
+statuspara.setAttribute('id',"paraa");
+para.setAttribute('id',"paragraph");
+//var wrapper=document.createElement("div");
+  var popup = document.createElement("div");
+var popupheader=document.createElement("header");
+var node=document.createTextNode(awayname);
+//wrapper.setAttribute('id',"wrapper");
+popup.setAttribute('id',"popup");
+popupheader.setAttribute('id',"popupheader");
+const element = document.getElementById("wrapper");
+element.appendChild(popup);
+//wrapper.style.display="none";
+//popup.style.display="none";
+//wrapper.appendChild(popup);
+popup.appendChild(popupheader);
+popupheader.textContent=away;
+
+newDiv.onclick= e =>
+ {
+   var target=e.target.textContent;
+  //console.log('working');
+popup.style.display = "block";
+popupheader.textContent=target;
+var firstWord = target.split(" ")[0];
+console.log(firstWord);
+var clint =data['response'];
+for(i=0;i<clint.length;i++)
+{
+  awayteams=data['response'][i]['teams']['home']['name'];
+  hometeams=data['response'][i]['teams']['home']['name'];
+   homegoals=data['response'][i]['goals']['home'];
+   awaygoals=data['response'][i]['goals']['away'];
+  
+ // console.log(awayteams);
+ var ff=awayteams.split(" ")[0];
+ var gg=hometeams.split(" ")[0];
+ var lll=homegoals;
+ var rrr=awaygoals;
+if(firstWord==ff||firstWord==gg||firstWord==lll||firstWord==rrr)
+{
+ // console.log(data['response'][i]);
+ var events=data['response'][i]['events'];
+for(var g=0;g<events.length;g++){
+  //console.log(data['response'][i]['events'][g]);
+  var type=data['response'][i]['events'][g]['type'];
+ var time=data['response'][i]['events'][g]['time']['elapsed'];
+ var goalscorername=data['response'][i]['events'][g]['player']['name'];
+ var details=data['response'][i]['events'][g]['detail'];
+var stadium=data['response'][i]['fixture']['venue']['name'];
+var clintt = [[stadium],[details],[type,time],[goalscorername]];
+//console.log(clintt);
+var stats=document.createElement("p"); 
+var diiv=document.createElement("div");
+stats.setAttribute('id',"stats");
+let arrayy=[];
+arrayy.splice(1,0, details);
+arrayy.splice(2,1,type);
+arrayy.splice(3,2,time);
+arrayy.splice(4,3,goalscorername);
+noddde=document.createTextNode(arrayy);
+
+stats.innerText=null;
+stats.appendChild(noddde);
+stats.style.display="block";
+diiv.appendChild(stats);
+popup.appendChild(diiv);
+console.log(arrayy);
+diiv.setAttribute('id',"popupdiv");
+}
+
+stadium=data['response'][i]['fixture']['venue']['name'];
+league=data['response'][i]['league']['name'];
+//console.log(league,stadium);
+var tabledata=document.createElement("table");
+var para=document.createElement("p");
+var nodde=document.createTextNode(league+stadium);
+para.appendChild(nodde);
+popup.appendChild(para);
+}}
+  //if(popupheader.textContent.includes'')
+// var popup=document.getElementById("popup");
+//var body=document.getElementById("wrapper");
+wrapper.style.display= "block";
+//document.getElementById("popupheader").innerText=awayname;
+document.querySelector('#wrapper').addEventListener("click" , function(){
+    window.location.reload(true);{
+popup.style.display="none";
+wrapper.style.display="none";
+para.remove();
+document.getElementById("stats").innerText='';
+}})}}});
+
+
+var league =document.getElementById('dropdown-contentleague');
+window.onclick = e =>
+ {
+  var year=document.getElementById('dropdown-content');
+//  var targetbutton=year.target.textContent;
+  this.targetbuttonleague=e.target.id;
+  console.log(targetbuttonleague);
+
+ var fetchh=[['https://v3.football.api-sports.io/standings?league='+targetbuttonleague+'&season=2022']/*[targetbutton]*/];
+fetch("https://v3.football.api-sports.io/standings?league="+targetbuttonleague+"&season=2022", {        
+        " method" :"GET",
+      "headers": {
+"x-rapidapi-host" : "v3.football.api-sports.io",
+"x-rapidapi-key": "da28920656c77f22e66c6021321759f7"
+      }
+
+      }
+      )
+       .then(res=>res.json())
+      .then(data=>{
+          console.log(data);
+       var leaguetable=data['response']['0']['league']['standings']['0'];
+        var temp="";
+        var dropdown=document.getElementsByClassName('dropdown-content');
+      
+        for(l=0;l<leaguetable.length;l++){
+        
+          var leagueteams=data['response']['0']['league']['standings']['0'][l]['team']['name'];
+          var teamlogos=data['response']['0']['league']['standings']['0'][l]['team']['logo'];
+          var points=data['response']['0']['league']['standings']['0'][l]['points'];
+          var mp=data['response']['0']['league']['standings']['0'][l]['all']['played'];
+          var wins=data['response']['0']['league']['standings']['0'][l]['all']['win'];
+          var draw=data['response']['0']['league']['standings']['0'][l]['all']['draw'];
+          var loses=data['response']['0']['league']['standings']['0'][l]['all']['lose'];
+
+          tablepic=document.createElement("img");
+tablepic.setAttribute('src',teamlogos);
+          console.log(leagueteams);
+          var clintyy = document.createElement('div');
+
+
+clintyy.appendChild(tablepic);
+          temp+="<tr>";
+          temp += "<tr>";
+            temp +='<tr><td><img src="'+ teamlogos +'" alt="" id="pictures"/>'+ leagueteams+ '</td>';
+          
+              temp += "<td>" + mp  + "</td>"
+              temp += "<td>" + wins  + "</td>"
+              temp += "<td>" + draw  + "</td>"
+              temp += "<td>" + loses  + "</td>"
+              temp += "<td>" + points  + "</td> </tr>";
+            
+        }      
+        document.getElementById('data').innerHTML = temp;
+});}
+    document.getElementById("popup").style.display = "none";
+
+    fetch('https://gnews.io/api/v4/search?q="premier league"&token=a0ef6727e3c457e427abe7f92e3c2077')
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        console.log(data);
+        var articles = data['articles'];
+        for(var u=0;u<articles.length;u++)
+        {
+          var articlecontent=data['articles'][u]['content'];
+          var articledescription=data['articles'][u]['description'];
+          var articleimage=data['articles'][u]['image'];
+          var publishtime=data['articles'][u]['publishedAt'];
+          var title=data['articles'][u]['title'];
+          console.log("content:"+articlecontent);
+          console.log("description:"+articledescription);
+          var articleparagraph=document.createElement("p"); 
+          var articlediv=document.createElement("div");
+          var articlenode=document.createTextNode(title); 
+          var clock=document.createElement("img");
+       
+        console.log(publishtime);
+        var timee=publishtime.slice(0,10);
+        var timepara=document.createElement("p"); 
+        var timecontenr=document.createTextNode(timee); 
+            articleimagediv=document.createElement("img");
+            var timediv=document.createElement('div');
+            timediv.setAttribute('id',"timediv")
+  clock.setAttribute('src','C:\\Users\\abdi\\OneDrive\\Pictures\\clock.png');
+  clock.setAttribute('id',"clockimage")
+articleimagediv.setAttribute('src',articleimage);
+ newsdivclass= document.getElementById('newsdiv');
+articlediv.setAttribute('id',"articlediv");
+articleimagediv.setAttribute('id',"articleimagediv");
+articleparagraph.setAttribute('id',"articledescription");
+timepara.setAttribute('id',"timepara");
+articlediv.appendChild(articleimagediv);
+articleparagraph.appendChild(articlenode);
+articlediv.appendChild(articleparagraph);
+articlediv.appendChild(timediv);
+newsdivclass.appendChild(articlediv);
+timediv.appendChild(clock);
+timepara.appendChild(timecontenr);
+timediv.appendChild(timepara);
+articlediv.onclick=function(){
+  location.href = 'http://www.google.com'
+}
+        }
+    });
+
+</script>
+</body>
+</html>
